@@ -143,5 +143,68 @@ public class ComputerDao {
 		}
 		return -1;
 	}
+	
+	public List<ComputerModel> getComputersListPaged(int Page, int PageCapacity){
+		List<ComputerModel> computersList = new ArrayList<>();
+		try(PreparedStatement pSttmnt = connection.prepareStatement("Select * From computer LIMIT ?,?");
+				){
+			
+			pSttmnt.setInt(1, (Page-1)*PageCapacity);
+			pSttmnt.setInt(2, PageCapacity);
+			ResultSet resultSet = pSttmnt.executeQuery(); 
+			
+			while(resultSet.next()) {
+				ComputerModel company = new ComputerModel(resultSet.getInt("id"),
+					 resultSet.getString("name"), resultSet.getTimestamp("introduced"), 
+					 resultSet.getTimestamp("discontinued"), resultSet.getInt("company_id"));
+				computersList.add(company);
+			}
+			
+		}catch(SQLException sE) {
+			
+		}
+		return computersList;
+	}
+	
+	public List<ComputerModel> getComputersListOfLastPage(int pageCapacity){
+		List<ComputerModel> computersList = null;
+		try(PreparedStatement pSttmnt = connection.prepareStatement("Select * From computer LIMIT ?,?");
+				){
+			
+			int rowsNumber = countComputers();
+			int pageNumbers = 0;
+			if(rowsNumber>pageCapacity) {
+				pageNumbers = rowsNumber/pageCapacity;
+				if(rowsNumber%pageCapacity>0);
+					pageNumbers+=1;
+				pSttmnt.setInt(1, (pageNumbers-1)*pageCapacity);
+			}
+			else
+				pSttmnt.setInt(1, 0);
+			pSttmnt.setInt(2, pageCapacity);
+			ResultSet resultSet = pSttmnt.executeQuery(); 
+			computersList = resultsetOfComputersToAList(resultSet);	
+		}catch(SQLException sE) {
+			
+		}
+		return computersList;
+	}
+	
+	List<ComputerModel> resultsetOfComputersToAList(ResultSet resultSet){
+		List<ComputerModel> computersList = new ArrayList<>();
+		try {
+			while(resultSet.next()) {
+				ComputerModel company = new ComputerModel(resultSet.getInt("id"),
+					 resultSet.getString("name"), resultSet.getTimestamp("introduced"), 
+					 resultSet.getTimestamp("discontinued"), resultSet.getInt("company_id"));
+				computersList.add(company);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return computersList;
+	}
+	
 
 }

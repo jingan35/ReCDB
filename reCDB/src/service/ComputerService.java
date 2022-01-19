@@ -41,5 +41,13 @@ public class ComputerService {
 	public int countComputers() {
 		return computerDao.countComputers();
 	}
+	
+	public List<ComputerModel> getComputersListPaged(int Page, int PageCapacity){
+		return computerDao.getComputersListPaged(Page, PageCapacity);
+	}
+	
+	public List<ComputerModel> getComputersListOfLastPage(int PageCapacity){
+		return computerDao.getComputersListOfLastPage(PageCapacity);
+	} 
 
 }

@@ -19,16 +19,18 @@ public class Main {
 			System.out.println(cm.getId()+" "+cm.getName());
 		}*/
 		
-		/*ComputerService computerService = ComputerService.getInstance();
-		List<ComputerModel> computersList = computerService.getComputersList();
+		ComputerService computerService = ComputerService.getInstance();
+		List<ComputerModel> computersList = computerService.getComputersListOfLastPage(
+				page.getPageCapcity());
 		for(ComputerModel cm: computersList) {
 			System.out.println(cm.getId()+" "+cm.getName());
-		}*/
+		}
 		
 		//computerService.addComputer("testadd", null, null, 1);
 		//computerService.updateComputer(577, "testUp", null, null, 2);
 		//computerService.deleteComputer(577);
-		System.out.print(companyService.countCompanies());
+		System.out.println(companyService.countCompanies());
+
 
 	}
 
